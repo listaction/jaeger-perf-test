@@ -6,6 +6,12 @@ services:
       SPAN_STORAGE_TYPE: cassandra
       CASSANDRA_SERVERS: cassandra
       CASSANDRA_KEYSPACE: jaeger_v1_test
+    entrypoint: /go/bin/collector-linux --sampling.strategies-file=sampling/strategies.json --collector.queue-size=500000
+    volumes: 
+      - ./sampling:/sampling
+    ports:
+      - 14269:14269/tcp
+      - 14268:14268/tcp    
     links:
       - cassandra
       - cassandra2
@@ -55,9 +61,15 @@ services:
     image: scylladb/scylla:3.0.4
     volumes:
       - .docker/scylladb/1:/var/lib/scylla
+    ports:
+      - 9042:9042
+      - 9180:9180
   cassandra2:
     image: scylladb/scylla:3.0.4
     command: --seeds=cassandra
+    ports:
+      - 19042:9042
+      - 19180:9180
     links:
       - cassandra
     volumes:
@@ -65,6 +77,9 @@ services:
   cassandra3:
     image: scylladb/scylla:3.0.4
     command: --seeds=cassandra
+    ports:
+      - 29042:9042
+      - 29180:9180
     links:
       - cassandra
     volumes:
