@@ -16,12 +16,28 @@ services:
       - cassandra
       - cassandra2
       - cassandra3
+  collector2:
+    image: jaegertracing/jaeger-collector:1.11
+    environment: 
+      SPAN_STORAGE_TYPE: cassandra
+      CASSANDRA_SERVERS: cassandra
+      CASSANDRA_KEYSPACE: jaeger_v1_test
+    entrypoint: /go/bin/collector-linux --sampling.strategies-file=sampling/strategies.json --collector.queue-size=500000
+    volumes: 
+      - ./sampling:/sampling
+    ports:
+      - 24269:14269/tcp
+      - 24268:14268/tcp    
+    links:
+      - cassandra
+      - cassandra2
+      - cassandra3      
   agent: 
     image: jaegertracing/jaeger-agent:1.11
     restart: unless-stopped
     command: 
       # - --collector.host-port=collector:14267
-      - --reporter.grpc.host-port=collector:14250
+      - --reporter.grpc.host-port=collector:14250,collector2:14250
       - --log-level=debug
     ports:
       - 5775:5775/udp
@@ -30,6 +46,7 @@ services:
       - 5778:5778/tcp
     links:
       - collector
+      - collector2
   web:
     image: jaegertracing/jaeger-query:1.11
     restart: unless-stopped
