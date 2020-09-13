@@ -2,6 +2,8 @@ version: '3'
 services:    
   agent: 
     image: jaegertracing/jaeger-agent:1.11
+    security_opt:
+      - 'seccomp:unconfined'    
     restart: unless-stopped
     command: 
       # - --collector.host-port=collector:14267

@@ -19,6 +19,8 @@ services:
       - cassandra3
   collector2:
     image: jaegertracing/jaeger-collector:1.11
+    security_opt:
+      - 'seccomp:unconfined'    
     environment: 
       SPAN_STORAGE_TYPE: cassandra
       CASSANDRA_SERVERS: cassandra
@@ -36,6 +38,8 @@ services:
       - cassandra3      
   agent: 
     image: jaegertracing/jaeger-agent:1.11
+    security_opt:
+      - 'seccomp:unconfined'    
     restart: unless-stopped
     command: 
       # - --collector.host-port=collector:14267
@@ -78,6 +82,8 @@ services:
 
   cassandra:
     image: scylladb/scylla:3.0.4
+    security_opt:
+      - 'seccomp:unconfined'    
     volumes:
       - .docker/scylladb/1:/var/lib/scylla
     ports:
@@ -85,6 +91,8 @@ services:
       - 9180:9180
   cassandra2:
     image: scylladb/scylla:3.0.4
+    security_opt:
+      - 'seccomp:unconfined'    
     command: --seeds=cassandra
     ports:
       - 19042:9042
@@ -95,6 +103,8 @@ services:
       - .docker/scylladb/2:/var/lib/scylla
   cassandra3:
     image: scylladb/scylla:3.0.4
+    security_opt:
+      - 'seccomp:unconfined'    
     command: --seeds=cassandra
     ports:
       - 29042:9042
