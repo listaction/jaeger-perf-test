@@ -1,0 +1,3 @@
+[submodule "jaeger-workload"]
+	path = jaeger-workload
+	url = https://github.com/listaction/jager-workload.git
