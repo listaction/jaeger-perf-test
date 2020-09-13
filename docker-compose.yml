@@ -6,7 +6,7 @@ services:
       SPAN_STORAGE_TYPE: cassandra
       CASSANDRA_SERVERS: cassandra
       CASSANDRA_KEYSPACE: jaeger_v1_test
-    entrypoint: /go/bin/collector-linux --sampling.strategies-file=sampling/strategies.json --collector.queue-size=500000 "--cassandra.index.tags=false --cassandra.index.logs=false --cassandra.index.process-tags=false
+    entrypoint: /go/bin/collector-linux --sampling.strategies-file=sampling/strategies.json --collector.queue-size=500000 --cassandra.index.tags=false --cassandra.index.logs=false --cassandra.index.process-tags=false
     volumes: 
       - ./sampling:/sampling
     ports:
